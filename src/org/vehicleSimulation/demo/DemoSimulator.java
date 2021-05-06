@@ -20,7 +20,7 @@ public class DemoSimulator {
 			if(simulationTime <= 0) {
 				System.out.println("Error : 시간(초)은 0보다 커야 합니다.");
 				System.out.println();
-			}
+			} 
 		}while(simulationTime <= 0);
 
 		int direction = 0;
