@@ -116,7 +116,7 @@ public class VehicleSimulator {
 				}
 			}while(repeatChk);
 			
-			
+			 
 			vehicleList.add(vehicle);
 		}
 		
