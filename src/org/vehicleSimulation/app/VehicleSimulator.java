@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class VehicleSimulator {
 
 	// 이동체정보 저장 할 리스트
-	static List<Vehicle> list = new ArrayList<Vehicle>();  
+	static List<Vehicle> vehicleList = new ArrayList<Vehicle>();  
 	
 	public static void main(String[] args) {
 		System.out.println("###");
@@ -22,29 +21,104 @@ public class VehicleSimulator {
 	private static void inputData() {
 		
 		Scanner sc = new Scanner(System.in);
+		
+		//입력 값 검증체크 변수
 		boolean repeatChk = false;
 		
 		int vCount = 0;
-		do {
+		do {// 이동체 수량 받기
 			repeatChk = false;
 			System.out.print("이동체의 수량을 입력해주십시오 : ");
 			 vCount = sc.nextInt();
 			if(vCount <= 0 || vCount > 4) {
-				System.out.println("이동체의 수량은 1대 이상, 4대 이하만 가능합니다.");
+				System.out.println("error : 이동체의 수량은 1대 이상, 4대 이하만 가능합니다.");
 				System.out.println();
 				repeatChk = true;
 			} 
 		}while(repeatChk);
 		
+		
 		for(int i=1; i<=vCount; i++) {
 			System.out.println();
-			System.out.println(i+"번째 이동체 정보입력을 시작하겠습니다...");
+			System.out.println(i+"번 이동체 정보입력을 시작하겠습니다...");
 			Vehicle vehicle = new Vehicle();
 			
-			String id = "";
-			System.out.print(i+"번째 이동체의 이름을 입력하시오 : ");
-			id = sc.next();
-			System.out.println(id);
+			do {// 이동체 이름 받기
+				System.out.print(i+"번 이동체의 이름을 입력하시오 : ");
+				repeatChk = false;
+				String name = sc.next();
+				for (Vehicle vc : vehicleList) {
+					if(vc.getName().equals(name)) {
+						repeatChk = true;
+					}
+				}
+				if(repeatChk) {
+					System.out.println("error : 이름이 중복됩니다. 다시 입력해주십시오.");
+					System.out.println();
+				}else {
+					vehicle.setName(name);	
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 ID 받기
+				System.out.print(i+"번 이동체의 ID를 입력하시오 : ");
+				repeatChk = false;
+				String id = sc.next();
+				for (Vehicle vc : vehicleList) {
+					if(vc.getId().equals(id)) {
+						repeatChk = true;
+					}
+				}
+				if(repeatChk) {
+					System.out.println("error : ID가 중복됩니다. 다시 입력해주십시오.");
+					System.out.println();
+				}else{
+					vehicle.setId(id);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 외형 받기
+				System.out.print(i+"번 이동체의 외형 type을 선택하십시오(원, 정사각형) : ");
+				repeatChk = false;
+				String shape = sc.next();
+				if(!(shape.equals("원") || shape.equals("정사각형"))) {
+					repeatChk = true;
+					System.out.println("error : 원 또는 정사각형만 입력 가능합니다. 다시 입력해주십시오.");
+					System.out.println();
+				}else {
+					vehicle.setShape(shape);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 최초 방향각 입력
+				System.out.print(i+"번 이동체의 최초 방향각을 입력하십시오(0도 ~ 90도) : ");
+				repeatChk = false;
+				double initialDegree = sc.nextDouble();
+				if(initialDegree < 0 || initialDegree > 90) {
+					repeatChk = true;
+					System.out.println("error : 방향각 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setInitialDegree(initialDegree);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 최초 이동속도 입력
+				System.out.print(i+"번 이동체의 최초 이동속도를 입력하십시오(1노트 ~ 50노트) : ");
+				repeatChk = false;
+				double initialNote = sc.nextDouble();
+				if(initialNote < 1 || initialNote > 50) {
+					repeatChk = true;
+					System.out.println("error : 이동속도 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setInitialNote(initialNote);
+				}
+			}while(repeatChk);
+			
+			
+			vehicleList.add(vehicle);
+		}
 		
 
 //			long simulationTime = 0L;
@@ -57,7 +131,6 @@ public class VehicleSimulator {
 //				} 
 //			}while(simulationTime <= 0);
 			
-		}
 		
 		
 //		int direction = 0;
