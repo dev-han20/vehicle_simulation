@@ -16,29 +16,28 @@ public class VehicleSimulator {
 	static List<Vehicle> vehicleList = new ArrayList<Vehicle>();  
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println("###");
 		
 		// 이동체 데이터 받기
 		inputData();
 		
 		// 시뮬레이션 시작 시간
 		LocalDateTime lt = LocalDateTime.now();
-//		simulation(null, lt);
 		
 		for (Vehicle v : vehicleList) {
+			// 시뮬레이션 실행
 			simulation(v, lt);
 		}
 		
 		
-		
 	}
 
-	
 	private static void simulation(Vehicle vehicle, LocalDateTime lt) throws IOException {
 		long currentTime = 0L;
 		StringBuilder sb = new StringBuilder();
 //		File file = new File("C:\\ide\\log\\"+lt.toString().replaceAll(":", ".")+".txt");
-		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"+lt.toString().replaceAll("T", "_").replaceAll(":", ".").substring(0, lt.toString().lastIndexOf("."))+"_"+vehicle.getName()+".txt");
+		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"
+					+lt.toString().replaceAll("T", "_").replaceAll(":", ".").substring(0, lt.toString().lastIndexOf("."))
+					+"_"+vehicle.getName()+".txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 		
 		if(currentTime == 0) {
@@ -50,13 +49,15 @@ public class VehicleSimulator {
 					+ "|0.000|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()+"|0.000") ;
 		}
 		
-		System.out.println(sb.toString());
-		
 		while(vehicle.getSimulationTime() != currentTime) {
 			// 1초 증가
 			currentTime++;
+			
+			
+			
 		}
 		
+		System.out.println(sb.toString());
 		bw.write(sb.toString());
 		bw.flush();
 		bw.close();
@@ -80,7 +81,6 @@ public class VehicleSimulator {
 				repeatChk = true;
 			} 
 		}while(repeatChk);
-		
 		
 		for(int i=1; i<=vCount; i++) {
 			System.out.println();
@@ -254,7 +254,6 @@ public class VehicleSimulator {
 			
 			vehicleList.add(vehicle);
 		}
-		
 		sc.close();
 	}
 	
