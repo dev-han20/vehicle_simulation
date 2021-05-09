@@ -33,6 +33,12 @@ public class VehicleSimulator {
 
 	private static void simulation(Vehicle vehicle, LocalDateTime lt) throws IOException {
 		long currentTime = 0L;
+		double currentX = 0;
+		double currentY = 0;
+		double currentDegree = 0;
+		double currentNote = 0;
+		double currentTotalArea = 0;
+		
 		StringBuilder sb = new StringBuilder();
 //		File file = new File("C:\\ide\\log\\"+lt.toString().replaceAll(":", ".")+".txt");
 		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"
@@ -47,12 +53,23 @@ public class VehicleSimulator {
 					+ "|"+vehicle.getName()+"|"+vehicle.getId()+"|"+vehicle.getShape()+"|"+vehicle.getvLength()+"|"+vehicle.getStartX()
 					+ "|"+vehicle.getStartY()+"|"+vehicle.getInitialNote()+"|"+vehicle.getInitialDegree()
 					+ "|0.000|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()+"|0.000") ;
+			
+			// 현재 값 초기화
+			currentX = vehicle.getStartX();
+			currentY = vehicle.getStartY();
+			currentDegree = vehicle.getInitialDegree();
+			currentNote = vehicle.getInitialNote();
 		}
 		
 		while(vehicle.getSimulationTime() != currentTime) {
 			// 1초 증가
 			currentTime++;
 			
+			currentX =
+			currentY =
+			currentDegree = vehicle.getInitialDegree();
+			currentNote = vehicle.getInitialNote();
+			currentTotalArea = 0;
 			
 			
 		}
