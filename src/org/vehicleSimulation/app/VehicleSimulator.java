@@ -41,7 +41,8 @@ public class VehicleSimulator {
 		double nextY = 0;
 		double nextDegree = 0;
 		double nextNote = 0;
-		double currentTotalArea = 0;
+		double distance = 0;
+		double currentMovingArea = 0;
 		
 		StringBuilder sb = new StringBuilder();
 //		File file = new File("C:\\ide\\log\\"+lt.toString().replaceAll(":", ".")+".txt");
@@ -54,8 +55,8 @@ public class VehicleSimulator {
 			sb.append("시간|이름|ID|타입|이동체크기(m)|x좌표|y좌표|이동속도(knot)|방향각|이동면적(m2)|전체면적(m2)|MPI");
 			sb.append("\n");
 			sb.append(lt.plusSeconds(currentTime).toString().replaceAll("T", " ").substring(0, lt.toString().lastIndexOf("."))
-					+ "|"+vehicle.getName()+"|"+vehicle.getId()+"|"+vehicle.getShape()+"|"+vehicle.getvLength()+"|"+vehicle.getStartX()
-					+ "|"+vehicle.getStartY()+"|"+vehicle.getInitialNote()+"|"+vehicle.getInitialDegree()
+					+ "|"+vehicle.getName()+"|"+vehicle.getId()+"|"+vehicle.getShape()+"|"+vehicle.getvLength()
+					+ "|"+vehicle.getStartX()+"|"+vehicle.getStartY()+"|"+vehicle.getInitialNote()+"|"+vehicle.getInitialDegree()
 					+ "|0.000|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()+"|0.000") ;
 			
 			// 현재 값 초기화
@@ -69,13 +70,35 @@ public class VehicleSimulator {
 			// 1초 증가
 			currentTime++;
 			
-			nextNote = currentNote + vehicle.getChangeNote();
+			// 1초뒤 노트 = 현재노트 + 노트증감량
+			nextNote = (currentNote + vehicle.getChangeNote() > 50 ? 50 : currentNote + vehicle.getChangeNote());
+			// 1초뒤 각도 = 현재각도 + 각도증감량
 			nextDegree = currentDegree + vehicle.getChangeDegree();
-			nextX = currentX + (nextNote * Math.cos(Math.toRadians(nextDegree)));
-			nextY = currentY + (nextNote * Math.sin(Math.toRadians(nextDegree)));
-					
-			currentTotalArea = 0;
+			if(nextDegree < 0) {
+				nextDegree = 0;
+			}else if(nextDegree > 90) {
+				nextDegree = 90;
+			}
+			// 다음 X축 좌표 = 현재X축 좌표 + (1초뒤 노트 x 0.5144 x cos(1초뒤 각도의 라디안 값)) 
+			nextX = currentX + (nextNote * 0.5144 * Math.cos(Math.toRadians(nextDegree)));
+			// 다음 Y축 좌표 = 현재Y축 좌표 + (1초뒤 노트 x 0.5144 x sin(1초뒤 각도의 라디안 값)) 
+			nextY = currentY + (nextNote * 0.5144 * Math.sin(Math.toRadians(nextDegree)));
+			// 두점 사이의 거리 피타고라스 정리 써서 구함
+			distance = Math.sqrt(Math.pow(nextX-currentX, 2) + Math.pow(nextY-currentY, 2));
+			// 현재까지 이동한 영역의 합
+			currentMovingArea = currentMovingArea + (distance * vehicle.getvLength());
 			
+			currentX = nextX;
+			currentY = nextY;
+			currentNote = nextNote;
+			currentDegree = nextDegree;
+			
+			sb.append("\n");
+			sb.append(lt.plusSeconds(currentTime).toString().replaceAll("T", " ").substring(0, lt.toString().lastIndexOf("."))
+					+ "|"+vehicle.getName()+"|"+vehicle.getId()+"|"+vehicle.getShape()+"|"+vehicle.getvLength()
+					+ "|"+currentX+"|"+currentY+"|"+currentNote+"|"+currentDegree+"|"+currentMovingArea
+					+ "|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()
+					+ "|"+new BigDecimal(currentMovingArea / (vehicle.getWidth()*vehicle.getHeight())).toPlainString()) ;
 			
 		}
 		
