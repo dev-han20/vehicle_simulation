@@ -116,7 +116,98 @@ public class VehicleSimulator {
 				}
 			}while(repeatChk);
 			
-			 
+			do {// 이동체 임무가로영역 입력
+				System.out.print(i+"번 이동체의 임무영역(가로)을 입력하십시오(0m ~ 1000000m) : ");
+				repeatChk = false;
+				double width = sc.nextDouble();
+				if(width < 0 || width > 1000000) {
+					repeatChk = true;
+					System.out.println("error : 임무영역(가로) 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setWidth(width);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 임무세로영역 입력
+				System.out.print(i+"번 이동체의 임무영역(세로)을 입력하십시오(0m ~ 1000000m) : ");
+				repeatChk = false;
+				double height = sc.nextDouble();
+				if(height < 0 || height > 1000000) {
+					repeatChk = true;
+					System.out.println("error : 임무영역(세로) 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setHeight(height);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 각도 변화량 입력
+				System.out.print(i+"번 이동체의 방향각 증감량을 입력하십시오(0도 ~ 90도) : ");
+				repeatChk = false;
+				double changeDegree = sc.nextDouble();
+				if(changeDegree < 0 || changeDegree > 90) {
+					repeatChk = true;
+					System.out.println("error : 방향각 증감량의 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setChangeDegree(changeDegree);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 이동속도 변화량 입력
+				System.out.print(i+"번 이동체의 이동속도의 증감량을 입력하십시오(1노트 ~ 50노트) : ");
+				repeatChk = false;
+				double changeNote = sc.nextDouble();
+				if(changeNote < 1 || changeNote > 50) {
+					repeatChk = true;
+					System.out.println("error : 이동속도 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setChangeNote(changeNote);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 시작 가로축 좌표 입력
+				System.out.print(i+"번 이동체의 시작좌표(가로축)를 입력하십시오(0m ~ "+vehicle.getWidth()+"m : ");
+				repeatChk = false;
+				double startX = sc.nextDouble();
+				if(startX < 0 || startX > vehicle.getWidth()) {
+					repeatChk = true;
+					System.out.println("error : 가로축의 시작좌표 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setStartX(startX);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 시작 세로축 좌표 입력
+				System.out.print(i+"번 이동체의 시작좌표(세로축)를 입력하십시오(0m ~ "+vehicle.getHeight()+"m : ");
+				repeatChk = false;
+				double startY = sc.nextDouble();
+				if(startY < 0 || startY > vehicle.getHeight()) {
+					repeatChk = true;
+					System.out.println("error : 세로축의 시작좌표 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setStartY(startY);
+				}
+			}while(repeatChk);
+			
+			do {// 이동체 임무수행 시간 입력
+				System.out.print(i+"번 이동체의 시작좌표(세로축)를 입력하십시오(0m ~ "+vehicle.getHeight()+"m : ");
+				repeatChk = false;
+				double startY = sc.nextDouble();
+				if(startY < 0 || startY > vehicle.getHeight()) {
+					repeatChk = true;
+					System.out.println("error : 세로축의 시작좌표 범위가 맞지 않습니다. 다시 입력해주십시오");
+					System.out.println();
+				}else {
+					vehicle.setStartY(startY);
+				}
+			}while(repeatChk);
+			
+			
 			vehicleList.add(vehicle);
 		}
 		
