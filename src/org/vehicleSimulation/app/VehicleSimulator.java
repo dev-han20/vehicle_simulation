@@ -27,8 +27,6 @@ public class VehicleSimulator {
 			// 시뮬레이션 실행
 			simulation(v, lt);
 		}
-		
-		
 	}
 
 	private static void simulation(Vehicle vehicle, LocalDateTime lt) throws IOException {
@@ -45,10 +43,12 @@ public class VehicleSimulator {
 		double currentMovingArea = 0;
 		
 		StringBuilder sb = new StringBuilder();
-//		File file = new File("C:\\ide\\log\\"+lt.toString().replaceAll(":", ".")+".txt");
-		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"
+		File file = new File("C:\\ide\\log\\"
 					+lt.toString().replaceAll("T", "_").replaceAll(":", ".").substring(0, lt.toString().lastIndexOf("."))
 					+"_"+vehicle.getName()+".txt");
+//		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"
+//					+lt.toString().replaceAll("T", "_").replaceAll(":", ".").substring(0, lt.toString().lastIndexOf("."))
+//					+"_"+vehicle.getName()+".txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 		
 		if(currentTime == 0) {
@@ -100,7 +100,8 @@ public class VehicleSimulator {
 					+ "|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()
 					+ "|"+new BigDecimal(currentMovingArea / (vehicle.getWidth()*vehicle.getHeight())).toPlainString()) ;
 			
-			if(nextDegree < 0 || nextDegree >= 90) {
+			// 각도가 0도나 90도가 되면 종료(어차피 다음 1초 때 벗어나기때문에)
+			if(nextDegree <= 0 || nextDegree >= 90) {
 				break;
 			}
 			
