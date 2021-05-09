@@ -1,5 +1,11 @@
 package org.vehicleSimulation.app;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,15 +15,53 @@ public class VehicleSimulator {
 	// 이동체정보 저장 할 리스트
 	static List<Vehicle> vehicleList = new ArrayList<Vehicle>();  
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		System.out.println("###");
 		
 		// 이동체 데이터 받기
 		inputData();
 		
+		// 시뮬레이션 시작 시간
+		LocalDateTime lt = LocalDateTime.now();
+//		simulation(null, lt);
+		
+		for (Vehicle v : vehicleList) {
+			simulation(v, lt);
+		}
+		
+		
+		
 	}
 
 	
+	private static void simulation(Vehicle vehicle, LocalDateTime lt) throws IOException {
+		long currentTime = 0L;
+		StringBuilder sb = new StringBuilder();
+//		File file = new File("C:\\ide\\log\\"+lt.toString().replaceAll(":", ".")+".txt");
+		File file = new File("D:\\IDE\\_STS_starAD\\workspace\\vehicleSimulation\\log\\"+lt.toString().replaceAll("T", "_").replaceAll(":", ".").substring(0, lt.toString().lastIndexOf("."))+"_"+vehicle.getName()+".txt");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		
+		if(currentTime == 0) {
+			sb.append("시간|이름|ID|타입|이동체크기(m)|x좌표|y좌표|이동속도(knot)|방향각|이동면적(m2)|전체면적(m2)|MPI");
+			sb.append("\n");
+			sb.append(lt.plusSeconds(currentTime).toString().replaceAll("T", " ").substring(0, lt.toString().lastIndexOf("."))
+					+ "|"+vehicle.getName()+"|"+vehicle.getId()+"|"+vehicle.getShape()+"|"+vehicle.getvLength()+"|"+vehicle.getStartX()
+					+ "|"+vehicle.getStartY()+"|"+vehicle.getInitialNote()+"|"+vehicle.getInitialDegree()
+					+ "|0.000|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()+"|0.000") ;
+		}
+		
+		System.out.println(sb.toString());
+		
+		while(vehicle.getSimulationTime() != currentTime) {
+			// 1초 증가
+			currentTime++;
+		}
+		
+		bw.write(sb.toString());
+		bw.flush();
+		bw.close();
+	}
+
 	private static void inputData() {
 		
 		Scanner sc = new Scanner(System.in);
@@ -28,7 +72,7 @@ public class VehicleSimulator {
 		int vCount = 0;
 		do {// 이동체 수량 받기
 			repeatChk = false;
-			System.out.print("이동체의 수량을 입력해주십시오 : ");
+			System.out.print("이동체의 수량을 입력해주십시오(1대 ~ 4대) : ");
 			 vCount = sc.nextInt();
 			if(vCount <= 0 || vCount > 4) {
 				System.out.println("error : 이동체의 수량은 1대 이상, 4대 이하만 가능합니다.");
@@ -88,6 +132,13 @@ public class VehicleSimulator {
 				}else {
 					vehicle.setShape(shape);
 				}
+			}while(repeatChk);
+			
+			do {// 이동체 크기 입력
+				System.out.print(i+"번 이동체의 크기를 입력하십시오 : ");
+				repeatChk = false;
+				double vLength = sc.nextDouble();
+				vehicle.setvLength(vLength);
 			}while(repeatChk);
 			
 			do {// 이동체 최초 방향각 입력
@@ -169,7 +220,7 @@ public class VehicleSimulator {
 			}while(repeatChk);
 			
 			do {// 이동체 시작 가로축 좌표 입력
-				System.out.print(i+"번 이동체의 시작좌표(가로축)를 입력하십시오(0m ~ "+vehicle.getWidth()+"m : ");
+				System.out.print(i+"번 이동체의 시작좌표(가로축)를 입력하십시오(0m ~ "+vehicle.getWidth()+"m) : ");
 				repeatChk = false;
 				double startX = sc.nextDouble();
 				if(startX < 0 || startX > vehicle.getWidth()) {
@@ -182,7 +233,7 @@ public class VehicleSimulator {
 			}while(repeatChk);
 			
 			do {// 이동체 시작 세로축 좌표 입력
-				System.out.print(i+"번 이동체의 시작좌표(세로축)를 입력하십시오(0m ~ "+vehicle.getHeight()+"m : ");
+				System.out.print(i+"번 이동체의 시작좌표(세로축)를 입력하십시오(0m ~ "+vehicle.getHeight()+"m) : ");
 				repeatChk = false;
 				double startY = sc.nextDouble();
 				if(startY < 0 || startY > vehicle.getHeight()) {
@@ -195,87 +246,17 @@ public class VehicleSimulator {
 			}while(repeatChk);
 			
 			do {// 이동체 임무수행 시간 입력
-				System.out.print(i+"번 이동체의 시작좌표(세로축)를 입력하십시오(0m ~ "+vehicle.getHeight()+"m : ");
+				System.out.print(i+"번 이동체의 임무수행시간을 입력하십시오 : ");
 				repeatChk = false;
-				double startY = sc.nextDouble();
-				if(startY < 0 || startY > vehicle.getHeight()) {
-					repeatChk = true;
-					System.out.println("error : 세로축의 시작좌표 범위가 맞지 않습니다. 다시 입력해주십시오");
-					System.out.println();
-				}else {
-					vehicle.setStartY(startY);
-				}
+				double simulationTime = sc.nextDouble();
+				vehicle.setSimulationTime(simulationTime);
 			}while(repeatChk);
-			
 			
 			vehicleList.add(vehicle);
 		}
 		
-
-//			long simulationTime = 0L;
-//			do {
-//				System.out.print("시뮬레이션 할 시간(초)을 입력하세요 : ");
-//				simulationTime = sc.nextLong();
-//				if(simulationTime <= 0) {
-//					System.out.println("Error : 시간(초)은 0보다 커야 합니다.");
-//					System.out.println();
-//				} 
-//			}while(simulationTime <= 0);
-			
-		
-		
-//		int direction = 0;
-//		do {
-//			System.out.println();
-//			System.out.println("0  : X축 방향으로 이동");
-//			System.out.println("45 : 대각선 방향으로 이동");
-//			System.out.println("90 : Y축 방향으로 이동");
-//			System.out.print("이동체의 각도를 입력하세요 : ");
-//			direction = sc.nextInt();
-//			if(!(direction == 0 || direction == 45 ||direction == 90)) {
-//				System.out.println("Error : 방향각도는 0, 45, 90만 입력 할 수 있습니다.");
-//			}
-//		}while(!(direction == 0 || direction == 45 ||direction == 90));
-//
-//		double row = 0.0;
-//		double column = 0.0;
-//		do {
-//			System.out.println();
-//			System.out.print("영역의 가로 크기를 입력해주세요 : ");
-//			column = sc.nextDouble();
-//			System.out.print("영역의 세로 크기를 입력해주세요 : ");
-//			row = sc.nextDouble();
-//			if(row <= 0 || column <= 0) {
-//				System.out.println("영역의 각 길이는 0보다 커야합니다");
-//			}
-//		}while(row <= 0 || column <= 0);
-//		
-//		double rowSpeed = 0.0;
-//		double columnSpeed = 0.0;
-//		do {
-//			System.out.println();
-//			System.out.println("1노트 당 0.1칸씩 이동속도가 증가합니다");
-//			System.out.print("X축의 간격의 속도를 입력하세요 : ");
-//			columnSpeed = sc.nextDouble();
-//			System.out.print("Y축의 간격의 속도를 입력하세요 : ");
-//			rowSpeed = sc.nextDouble();
-//			if(rowSpeed <= 0 || columnSpeed <= 0) {
-//				System.out.println("속도의 값은 0보다 커야합니다");
-//			}
-//		}while(rowSpeed <= 0 || columnSpeed <= 0);
-//
-//		String id = "empty";
-//		String name = "empty";
-//		System.out.println(); 
-//		System.out.print("ID를 입력해주세요 : ");
-//		id = sc.next();
-//		System.out.print("이름를 입력해주세요 : ");
-//		name = sc.next();
-//		System.out.println();
-//
-//		
+		sc.close();
 	}
-	
 	
 
 }

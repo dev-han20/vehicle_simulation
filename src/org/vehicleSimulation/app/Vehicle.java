@@ -6,6 +6,7 @@ public class Vehicle {
 	private String name;	        // 이름
 	private String shape;			// 모양 (원, 정사각형)
 	private double simulationTime;	// 임무 시간
+	private double vLength;			// 이동체 크기(지름)
 	private double initialNote;	    // 초기속도 (1노트 : 0.5144m/s)
 	private double changeNote;	    // 속도 변화량 (1노트 : 0.5144m/s)
 	private double width;	        // 전체 영역의 가로길이
@@ -16,6 +17,13 @@ public class Vehicle {
 	private double startY;			// 시작 y좌표
 	
 	
+	
+	public double getvLength() {
+		return vLength;
+	}
+	public void setvLength(double vLength) {
+		this.vLength = vLength;
+	}
 	public double getSimulationTime() {
 		return simulationTime;
 	}
@@ -91,11 +99,10 @@ public class Vehicle {
 	
 	@Override
 	public String toString() {
-		return "Vehicle [id=" + id + ", name=" + name + ", shape=" + shape + ", initialNote=" + initialNote
-				+ ", changeNote=" + changeNote + ", width=" + width + ", height=" + height + ", initialDegree="
-				+ initialDegree + ", changeDegree=" + changeDegree + ", startX=" + startX + ", startY=" + startY + "]";
+		return "Vehicle [id=" + id + ", name=" + name + ", shape=" + shape + ", simulationTime=" + simulationTime
+				+ ", vLength=" + vLength + ", initialNote=" + initialNote + ", changeNote=" + changeNote + ", width="
+				+ width + ", height=" + height + ", initialDegree=" + initialDegree + ", changeDegree=" + changeDegree
+				+ ", startX=" + startX + ", startY=" + startY + "]";
 	}
-	
-	
 	
 }
