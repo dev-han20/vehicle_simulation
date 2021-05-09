@@ -37,6 +37,10 @@ public class VehicleSimulator {
 		double currentY = 0;
 		double currentDegree = 0;
 		double currentNote = 0;
+		double nextX = 0;
+		double nextY = 0;
+		double nextDegree = 0;
+		double nextNote = 0;
 		double currentTotalArea = 0;
 		
 		StringBuilder sb = new StringBuilder();
@@ -65,10 +69,11 @@ public class VehicleSimulator {
 			// 1초 증가
 			currentTime++;
 			
-			currentX =
-			currentY =
-			currentDegree = vehicle.getInitialDegree();
-			currentNote = vehicle.getInitialNote();
+			nextNote = currentNote + vehicle.getChangeNote();
+			nextDegree = currentDegree + vehicle.getChangeDegree();
+			nextX = currentX + (nextNote * Math.cos(Math.toRadians(nextDegree)));
+			nextY = currentY + (nextNote * Math.sin(Math.toRadians(nextDegree)));
+					
 			currentTotalArea = 0;
 			
 			
