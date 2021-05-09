@@ -100,6 +100,10 @@ public class VehicleSimulator {
 					+ "|"+new BigDecimal(vehicle.getWidth()*vehicle.getHeight()).toPlainString()
 					+ "|"+new BigDecimal(currentMovingArea / (vehicle.getWidth()*vehicle.getHeight())).toPlainString()) ;
 			
+			if(nextDegree < 0 || nextDegree >= 90) {
+				break;
+			}
+			
 		}
 		
 		System.out.println(sb.toString());
